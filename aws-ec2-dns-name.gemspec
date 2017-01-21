@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 Gem::Specification.new do |spec|
   spec.name          = "aws-ec2-dns-name"
-  spec.version       = "0.1.0"
+  spec.version       = "0.1.1"
   spec.authors       = ["Michikawa Masayoshi"]
   spec.email         = ["michikawa.masayoshi@gmail.com"]
 
