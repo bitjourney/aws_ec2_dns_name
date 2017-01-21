@@ -1,4 +1,4 @@
-$LOAD_PATH.unshift File.expand_path('../../lib', __FILE__)
-require 'aws/ec2/dns/name'
+$LOAD_PATH.unshift File.expand_path("../../lib", __FILE__)
+require "aws_ec2_dns_name"
 
-require 'minitest/autorun'
+require "minitest/autorun"
