@@ -2,8 +2,6 @@
 require "aws-sdk"
 
 class AwsEc2DnsName
-  VERSION = "0.1.0"
-
   attr_accessor :client
 
   # @param [String] region
