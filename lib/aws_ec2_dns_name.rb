@@ -13,24 +13,23 @@ class AwsEc2DnsName
                                        secret_access_key: secret_access_key)
   end
 
-  # @return [Array<Hash>]
-  def list
+  # @return [Array<Struct::Instance>]
+  def instances
+    instance_struct = Struct.new("Instance", :name_tag, :dns_name)
+
     client.describe_instances.first.reservations.map do |reservation|
       instance = reservation.instances.first
       name_tag = instance.tags.find { |tag| tag.key == "Name" }.value
       dns_name = dns_name(instance)
       next if dns_name.nil?
-
-      {
-        name_tag: name_tag,
-        dns_name: dns_name,
-      }
-    end.sort_by { |h| h[:name_tag] }
+      instance_struct.new(name_tag, dns_name)
+    end.sort_by { |i| i[:name_tag] }
   end
+  alias_method :list, :instances
 
   private
 
-  # @param
+  # @param [Aws::EC2::Types::Instance] instance
   # @return [String, NilClass]
   def dns_name(instance)
     public_dns_name = instance.public_dns_name
