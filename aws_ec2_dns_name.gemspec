@@ -1,13 +1,13 @@
 # frozen_string_literal: true
 Gem::Specification.new do |spec|
-  spec.name          = "aws-ec2-dns-name"
+  spec.name          = "aws_ec2_dns_name"
   spec.version       = "0.1.2"
   spec.authors       = ["Michikawa Masayoshi"]
   spec.email         = ["michikawa.masayoshi@gmail.com"]
 
   spec.summary       = "Simpler interface to AWS EC2 dns name"
   spec.description   = "Simpler interface to AWS EC2 dns name"
-  spec.homepage      = "https://github.com/michiomochi/aws-ec2-dns-name"
+  spec.homepage      = "https://github.com/bitjourney/aws_ec2_dns_name"
   spec.license       = "MIT"
 
   spec.files         = `git ls-files -z`.split("\x0").reject do |f|
