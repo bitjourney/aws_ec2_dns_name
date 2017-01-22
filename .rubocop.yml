@@ -5,7 +5,13 @@ AllCops:
     - vendor/**/*
     - bin/**
 
+Metrics/AbcSize:
+  Enabled: false
+
 Style/Documentation:
+  Enabled: false
+
+Style/MultilineBlockChain:
   Enabled: false
 
 Style/StringLiterals:
