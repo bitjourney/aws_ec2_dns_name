@@ -1,6 +1,8 @@
 # frozen_string_literal: true
 require "aws-sdk"
 
+require "aws_ec2_dns_name/instance"
+
 class AwsEc2DnsName
   attr_accessor :client
 
@@ -13,27 +15,25 @@ class AwsEc2DnsName
                                        secret_access_key: secret_access_key)
   end
 
-  # @return [Array<Struct::Instance>]
+  # @return [Array<AwsEc2DnsName:Instance>]
   def instances
-    instance_struct = Struct.new("Instance", :name_tag, :dns_name)
-
     client.describe_instances.first.reservations.map do |reservation|
-      instance = reservation.instances.first
-      name_tag = instance.tags.find { |tag| tag.key == "Name" }.value
-      dns_name = dns_name(instance)
+      ec2_instance = reservation.instances.first
+      name_tag = ec2_instance.tags.find { |tag| tag.key == "Name" }.value
+      dns_name = dns_name(ec2_instance)
       next if dns_name.nil?
-      instance_struct.new(name_tag, dns_name)
+      AwsEc2DnsName::Instance.new(name_tag, dns_name)
     end.sort_by { |i| i[:name_tag] }
   end
-  alias_method :list, :instances
+  alias list instances
 
   private
 
-  # @param [Aws::EC2::Types::Instance] instance
+  # @param [Aws::EC2::Types::Instance] ec2_instance
   # @return [String, NilClass]
-  def dns_name(instance)
-    public_dns_name = instance.public_dns_name
-    private_dns_name = instance.private_dns_name
+  def dns_name(ec2_instance)
+    public_dns_name = ec2_instance.public_dns_name
+    private_dns_name = ec2_instance.private_dns_name
 
     if public_dns_name.empty?
       private_dns_name
