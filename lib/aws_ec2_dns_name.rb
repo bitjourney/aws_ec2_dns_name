@@ -21,16 +21,19 @@ class AwsEc2DnsName
       ec2_instance = reservation.instances.first
       name_tag = ec2_instance.tags.find { |tag| tag.key == "Name" }.value
       dns_name = dns_name(ec2_instance)
-      next if dns_name.nil?
+
+      # dns_name of terminated instance is empty string
+      next if dns_name == ""
+
       AwsEc2DnsName::Instance.new(name_tag, dns_name)
-    end.sort_by { |i| i[:name_tag] }
+    end.compact.sort_by { |i| i[:name_tag] }
   end
   alias list instances
 
   private
 
   # @param [Aws::EC2::Types::Instance] ec2_instance
-  # @return [String, NilClass]
+  # @return [String]
   def dns_name(ec2_instance)
     public_dns_name = ec2_instance.public_dns_name
     private_dns_name = ec2_instance.private_dns_name
