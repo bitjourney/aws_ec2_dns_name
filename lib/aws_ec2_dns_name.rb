@@ -1,5 +1,6 @@
 # frozen_string_literal: true
-require "aws-sdk"
+
+require "aws-sdk-ec2"
 
 require "aws_ec2_dns_name/instance"
 
