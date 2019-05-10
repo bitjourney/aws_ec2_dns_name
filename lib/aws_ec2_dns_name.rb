@@ -20,13 +20,15 @@ class AwsEc2DnsName
   def instances
     client.describe_instances.first.reservations.map do |reservation|
       ec2_instance = reservation.instances.first
-      name_tag = ec2_instance.tags.find { |tag| tag.key == "Name" }.value
+      name_tag = ec2_instance.tags.find { |tag| tag.key == "Name" }
+      next unless name_tag
+      name_tag_value = name_tag.value
       dns_name = dns_name(ec2_instance)
 
       # dns_name of terminated instance is empty string
       next if dns_name == ""
 
-      AwsEc2DnsName::Instance.new(name_tag, dns_name)
+      AwsEc2DnsName::Instance.new(name_tag_value, dns_name)
     end.compact.sort_by { |i| i[:name_tag] }
   end
   alias list instances
